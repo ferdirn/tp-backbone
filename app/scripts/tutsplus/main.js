@@ -1,52 +1,87 @@
-var Person = Backbone.Model.extend({
-  defaults: {
-    name: "John Doe",
-    age: 30,
-    occupation: 'Worker'
-  },
-  validate: function(attrs, options) {
-    if (attrs.age < 1) {
-      return 'Age must be a positive number!';
+(function(){
+  // Namespaces
+  window.App = {
+    Models: {},
+    Views: {},
+    Collections: {},
+    Helpers: {}
+  };
+
+  // Template helper
+  App.Helpers.template = function(id) {
+    return _.template( $('#' + id).html() );
+  };
+
+  // Person model
+  App.Models.Person = Backbone.Model.extend({
+    defaults: {
+      name: "John Doe",
+      age: 30,
+      occupation: 'Worker'
+    },
+    validate: function(attrs, options) {
+      if (attrs.age < 1) {
+        return 'Age must be a positive number!';
+      }
+      if (!attrs.name) {
+        return 'Everyone has a name!';
+      }
+    },
+    work: function() {
+      return this.get('name') + ' is working.';
     }
-    if (!attrs.name) {
-      return 'Everyone has a name!';
+  });
+
+  // List of People, collection
+  App.Collections.People = Backbone.Collection.extend({
+    model: App.Models.Person
+  });
+
+  // The Views
+  App.Views.Person = Backbone.View.extend({
+    tagName: 'li',
+    template: App.Helpers.template('personTemplate'),
+    render: function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      return this;
     }
-  },
-  work: function() {
-    return this.get('name') + ' is working.';
-  }
-});
+  });
 
-var PeopleCollection = Backbone.Collection.extend({
-  model: Person
-});
+  App.Views.People = Backbone.View.extend({
+    tagName: 'ul',
+    render: function() {
+      this.collection.each(function(person) {
+        var personView = new App.Views.Person({ model: person});
+        this.$el.append(personView.render().el);
+      }, this);
+      return this;
+    }
+  });
 
-var PersonView = Backbone.View.extend({
-  tagName: 'li',
-  template: _.template( $('#personTemplate').html() ),
-  initialize: function() {
-    this.render();
-  },
-  render: function() {
-    this.$el.html(this.template(this.model.toJSON()));
-  }
-});
+  // Implementation
 
-var peopleCollection = new PeopleCollection([
-  {
-    name: 'Widi Astuti',
-    age: 35,
-    occupation: 'Manager'
-  },
-  {
-    name: 'Joni',
-    age: 50,
-    occupation: 'Entertainer'
-  }
-]);
+  var peopleCollection = new App.Collections.People([
+    {
+      name: 'Widi Astuti',
+      age: 35,
+      occupation: 'Manager'
+    },
+    {
+      name: 'Joni',
+      age: 50,
+      occupation: 'Entertainer'
+    }
+  ]);
 
-var person = new Person();
-var personView = new PersonView({model: person});
+  var person = new App.Models.Person();
+
+  peopleCollection.add(person);
+
+  var peopleView = new App.Views.People({ collection: peopleCollection });
+
+  $(document.body).append(peopleView.render().el);
+
+})();
 
 
 // var Person = function(config) {
