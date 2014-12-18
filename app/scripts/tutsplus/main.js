@@ -17,6 +17,10 @@ var Person = Backbone.Model.extend({
   }
 });
 
+var PeopleCollection = Backbone.Collection.extend({
+  model: Person
+});
+
 var PersonView = Backbone.View.extend({
   tagName: 'li',
   template: _.template( $('#personTemplate').html() ),
@@ -28,8 +32,22 @@ var PersonView = Backbone.View.extend({
   }
 });
 
-person = new Person();
-personView = new PersonView({model: person});
+var peopleCollection = new PeopleCollection([
+  {
+    name: 'Widi Astuti',
+    age: 35,
+    occupation: 'Manager'
+  },
+  {
+    name: 'Joni',
+    age: 50,
+    occupation: 'Entertainer'
+  }
+]);
+
+var person = new Person();
+var personView = new PersonView({model: person});
+
 
 // var Person = function(config) {
 //   this.name = config.name;
