@@ -1,5 +1,7 @@
 (function(){
-  window.App = {
+  'use strict';
+
+  var App = {
     Models: {},
     Views: {},
     Collections: {},
@@ -27,6 +29,7 @@
   // Task View
   App.Views.Task = Backbone.View.extend({
     tagName: 'li',
+    className: 'list-group-item',
     template: App.Helpers.template('taskTemplate'),
     initialize: function() {
       this.model.on('change', this.render, this);
@@ -38,7 +41,8 @@
     },
     editTask: function() {
       var newTaskTitle = prompt('[Edit] Enter the new task', this.model.get('title'));
-      if ( ! this.model.set('title', newTaskTitle, {validate: true}) ) {
+      console.log(newTaskTitle);
+      if ( newTaskTitle !== null && ! this.model.set('title', newTaskTitle, {validate: true}) ) {
         alert(this.model.validationError);
       }
     },
@@ -57,9 +61,31 @@
     }
   });
 
+  // Add Task
+  App.Views.AddTask = Backbone.View.extend({
+    el: '#addTask',
+    events: {
+      'submit': 'submitTask'
+    },
+    submitTask: function(e) {
+      e.preventDefault();
+      var newTaskTitle = $(e.currentTarget).find('input[type=text]').val();
+      var newTaskPriority = $(e.currentTarget).find('#priority').val();
+      var task = new App.Models.Task({ title: newTaskTitle, priority: newTaskPriority });
+      this.collection.add(task);
+
+      $(e.currentTarget).find('input[type=text]').val('');
+      $(e.currentTarget).find('#priority').val('1');
+    }
+  });
+
   // Tasks Collection View
   App.Views.Tasks = Backbone.View.extend({
     tagName: 'ul',
+    className: 'list-group',
+    initialize: function() {
+      this.collection.on('add', this.addOne, this);
+    },
     render: function() {
       this.collection.each(this.addOne, this);
       return this;
@@ -87,6 +113,7 @@
     }
   ]);
 
+  var addTask = new App.Views.AddTask({ collection: tasksCollection });
   var tasksView = new App.Views.Tasks({ collection: tasksCollection });
 
   $('.tasks').append(tasksView.render().el);

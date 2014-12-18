@@ -7,11 +7,40 @@
 </head>
 <body>
 
-  <h1>My Tasks</h1>
-  <div class="tasks">
+  <div class="container">
+    <h1>My Tasks</h1>
+    <form action="" id="addTask" class="form-horizontal">
+    <div class="row">
+      <div class="col-md-4">
+        <input type="text" placeholder="Add new task" class="form-control">
+      </div>
+      <div class="col-md-2">
+        <select name="priority" id="priority" class="form-control">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <input type="submit" value="Submit task" class="btn btn-success">
+    </div>
+    </form>
+
+    <div class="tasks"></div>
+
     <script id="taskTemplate" type="text/template">
-      <span><%= title %></span> <button class="btn btn-warning edit">Edit</button> <button class="btn btn-danger delete">Delete</button>
+      <%= title %> (priority <%= priority %>)
+      <span class="pull-right">
+      <button class="btn btn-sm btn-warning edit">Edit</button> <button class="btn btn-sm btn-danger delete">Delete</button>
+      </span>
     </script>
+
+    <div class="footer">
+      <div class="col-md-3">
+        <a href="index.html" class="btn btn-info">Home</a>
+      </div>
+    </div>
   </div>
 
   <script src="bower_components/underscore/underscore.js"></script>
@@ -19,8 +48,5 @@
   <script src="bower_components/backbone/backbone.js"></script>
   <script src="scripts/tutsplus/tasklist.js"></script>
 
-  <div class="col-md-3">
-    <a href="index.html" class="btn btn-info">Home</a>
-  </div>
 </body>
 </html>

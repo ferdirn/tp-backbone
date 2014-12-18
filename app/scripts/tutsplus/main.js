@@ -1,6 +1,8 @@
 (function(){
+  'use strict';
+
   // Namespaces
-  window.App = {
+  var App = {
     Models: {},
     Views: {},
     Collections: {},
@@ -15,7 +17,7 @@
   // Person model
   App.Models.Person = Backbone.Model.extend({
     defaults: {
-      name: "John Doe",
+      name: 'John Doe',
       age: 30,
       occupation: 'Worker'
     },
