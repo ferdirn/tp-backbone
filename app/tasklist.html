@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task List</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <h1>My Tasks</h1>
+  <div class="tasks">
+    <script id="taskTemplate" type="text/template">
+      <span><%= title %></span> <button class="btn btn-warning edit">Edit</button> <button class="btn btn-danger delete">Delete</button>
+    </script>
+  </div>
+
+  <script src="bower_components/underscore/underscore.js"></script>
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/backbone/backbone.js"></script>
+  <script src="scripts/tutsplus/tasklist.js"></script>
+
+  <div class="col-md-3">
+    <a href="index.html" class="btn btn-info">Home</a>
+  </div>
+</body>
+</html>
